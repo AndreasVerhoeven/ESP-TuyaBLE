@@ -18,8 +18,8 @@ to the client.
 
 You can create a `TuyaBLEDevice` or a subclass, like `TuyaBLESimpleLock` using one of the two dedicated constructors:
 
-    - `TuyaBLEDevice(TuyaBLEAdvertisedDeviceInfo, TuyaDeviceCredentials)` if you are scanning devices
-    - `TuyaBLEDevice(NimBLEAddress, TuyaDeviceCredentials)` if you know the address of the device
+- `TuyaBLEDevice(TuyaBLEAdvertisedDeviceInfo, TuyaDeviceCredentials)` if you are scanning devices
+- `TuyaBLEDevice(NimBLEAddress, TuyaDeviceCredentials)` if you know the address of the device
 
 In both cases, you need to provide credentials.
 
