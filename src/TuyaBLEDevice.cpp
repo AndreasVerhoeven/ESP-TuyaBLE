@@ -345,8 +345,8 @@ void TuyaBLEDevice::sendPairingRequest() {
 
 bool TuyaBLEDevice::connect() {
   if(_client != nullptr && _client->isConnected()) {
-    debugLog("[Device] already connected")
-    return false; // already connected
+    debugLog("[Device] already connected");
+    return false;
   }
 
   _isReady = false;
