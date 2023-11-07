@@ -65,20 +65,25 @@ private:
     Buffer keyToUseForFlag(TuyaBLESecurityFlag flag);
     Buffer ensureLocalKeyMD5();
 
+    // creating a session
+    void sendDeviceInfoRequest();
+    void sendPairingRequest();
+
+    // handling received data
     void onNotify(NimBLERemoteCharacteristic* characteristic, uint8_t* data, size_t length, bool isNotify);
     void handleReceivedMessageData(const Buffer& data);
     void parseAndHandleReceivedMessage(const Buffer& data);
     void handleReceivedFunction(const TuyaBLEReceivedMessage& message);
     void clearExpectedResponse();
-
-    void sendPairingRequest();
-
+    
+    // handle decoded responses
     void handleReceivedResponseSenderDeviceInfo(const TuyaBLEReceivedMessage& message);
     void handleReceivedResponseSenderPair(const TuyaBLEReceivedMessage& message);
     void handleReceivedResponseSenderDps(const TuyaBLEReceivedMessage& message);
     void handleReceivedRequestReceiveTime1Req(const TuyaBLEReceivedMessage& message);
     void handleReceivedReceiveDP(const TuyaBLEReceivedMessage& message);
 
+    // callbacks
     std::function<void(TuyaBLEDevice*)> _onConnectedCallback;
     std::function<void(TuyaBLEDevice*)> _onDisconnectedCallback;
     std::function<void(TuyaBLEDevice*)> _onReadyCallback;
@@ -86,13 +91,14 @@ private:
     std::function<void(TuyaBLEDevice*)> _onUpdatedReportedDataPointsCallback;
     std::function<void(TuyaBLEDevice*, const String&)> _onDebugLogCallback;
 
-
+    // for use in default arguments
     static const String emptyString;
 
 protected:
+    // this sends a raw message to the device
     void sendMessage(TuyaBLEFunctionCode code, const Buffer& data, uint32_t responseTo, bool expectsResponse);
-    void sendDeviceInfoRequest();
 
+    // called when disconnecting
     virtual void onDisconnect();
 public:
     TuyaBLEDevice(TuyaBLEAdvertisedDeviceInfo info,const TuyaDeviceCredentials& credentials ) : _deviceInfo(info), _credentials(credentials) {}
@@ -101,14 +107,6 @@ public:
         _deviceInfo._uuid = credentials.uuid();
         _deviceInfo._protocolVersion = protocolVersion;
     }
-
-    /// creates a specific device from an advertised device if the advertised device is a tuya device. If not, returns nullptr.
-    /// credentials need to be set later using setCredentials().
-    template<class DeviceClass = TuyaBLEDevice> static std::shared_ptr<DeviceClass> fromBLEAdvertisedDevice(NimBLEAdvertisedDevice device);
-
-    /// creates a specific device from a BLE mac address with credentials set to the given credentials.
-    template<class DeviceClass = TuyaBLEDevice> static std::shared_ptr<DeviceClass> fromAddressAndCredentials(const NimBLEAddress& address, const TuyaDeviceCredentials& credentials);
-
     // credentials
     void setCredentials(const TuyaDeviceCredentials& credentials);
     const TuyaDeviceCredentials& credentials() const { return this->_credentials; }
