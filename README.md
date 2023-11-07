@@ -58,7 +58,6 @@ void startScan() {
   scan->setScanCallbacks(new MyAdvertisedDeviceCallbacks());
   scan->start(0, true);
 }
-*/
 ```
 
 ### Connecting and Callbacks
