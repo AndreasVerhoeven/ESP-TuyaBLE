@@ -10,7 +10,6 @@
 #include "TuyaBLEAdvertisedDeviceInfo.h"
 #include "Buffer.h"
 
-#include <optional>
 #include <vector>
 #include <memory>
 
@@ -129,37 +128,41 @@ public:
 
     // checking received dps
     void requestDataPointsUpdate();
-    std::optional<TuyaDataPoint> reportedDataPoint(uint8_t dp) const { return _reportedDataPoints.at(dp); }
+    bool hasDataPoint(uint8_t dp) const { return _reportedDataPoints.find(dp) != _reportedDataPoints.end(); }
+    const TuyaDataPoint& reportedDataPoint(uint8_t dp) const { 
+        auto iter = _reportedDataPoints.find(dp);
+        return iter == _reportedDataPoints.end() ? TuyaDataPoint::invalid : iter->second;
+    }
     const std::map<uint8_t, TuyaDataPoint> reportedDataPoints() const { return _reportedDataPoints; }
 
     const Buffer& reportedRawDataPoint(uint8_t dp, const Buffer& defaultValue = Buffer::empty) const { 
         auto value = reportedDataPoint(dp);
-        return value ? value->raw() : defaultValue;
+        return value.isValid() ? value.raw() : defaultValue;
     }
 
     bool reportedBooleanDataPoint(uint8_t dp, bool defaultValue = false) const { 
         auto value = reportedDataPoint(dp);
-        return value ? value->boolean() : defaultValue;
+        return value.isValid() ? value.boolean() : defaultValue;
     }
 
     int32_t reportedValueDataPoint(uint8_t dp, int32_t defaultValue = 0) const { 
         auto value = reportedDataPoint(dp);
-        return value ? value->value() : defaultValue;
+        return value.isValid()? value.value() : defaultValue;
     }
 
     const String& reportedStringDataPoint(uint8_t dp, const String& defaultValue = TuyaBLEDevice::emptyString) const { 
         auto value = reportedDataPoint(dp);
-        return value ? value->string() : defaultValue;
+        return value.isValid() ? value.string() : defaultValue;
     }
 
     uint8_t reportedEnumerationDataPoint(uint8_t dp, uint8_t defaultValue = 0) const { 
         auto value = reportedDataPoint(dp);
-        return value ? value->enumeration() : defaultValue;
+        return value.isValid() ? value.enumeration() : defaultValue;
     }
 
     const Buffer& reportedBitmapDataPoint(uint8_t dp, const Buffer& defaultValue = Buffer::empty) const { 
         auto value = reportedDataPoint(dp);
-        return value ? value->bitmap() : defaultValue;
+        return value.isValid() ? value.bitmap() : defaultValue;
     }
 
     // sending dps

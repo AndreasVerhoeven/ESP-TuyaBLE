@@ -1,5 +1,7 @@
 #include "TuyaDataPoint.h"
 
+const TuyaDataPoint TuyaDataPoint::invalid = TuyaDataPoint();
+
 String TuyaDataPoint::debugDescription() const {
     String output = "dp = " + String(dp()) + ", type = ";
 

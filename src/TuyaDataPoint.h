@@ -20,12 +20,16 @@ private:
     TuyaDataPointType _type = TuyaDataPointType::raw;
 
     Buffer _buffer;
-    int32_t _value;
-    uint8_t _enumeration;
+    int32_t _value = 0;
+    uint8_t _enumeration = 0;
     String _string;
+
+    TuyaDataPoint() {}
 
 public:
     TuyaDataPoint(uint8_t dp, TuyaDataPointType type): _dp(dp), _type(type) {}
+
+    static const TuyaDataPoint invalid;
 
     static TuyaDataPoint raw(uint8_t dp, const Buffer& value) {
         TuyaDataPoint dataPoint(dp, TuyaDataPointType::raw);
@@ -64,6 +68,7 @@ public:
     }
     uint8_t dp() const { return _dp; }
     TuyaDataPointType type() const { return _type; }
+    bool isValid() const { return _dp != 0; }
 
     const Buffer& raw() const { return _buffer; }
     bool boolean() const  { return _value != 0; }

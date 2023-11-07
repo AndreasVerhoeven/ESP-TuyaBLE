@@ -1,6 +1,6 @@
 {
     "name": "TuyaBLE",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "An ESP32 library to connect to Tuya BLE devices based on Arduino-NimBLE.",
     "keywords": "tuya, bluetooth, ble",
     "repository":

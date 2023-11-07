@@ -15,8 +15,8 @@ struct TuyaBLEResponseParsedPacket {
   uint8_t protocolVersion;
   Buffer data;
 
- static std::optional<TuyaBLEResponseParsedPacket> fromData(const Buffer& data) {
-  if(data.size() < 1) return std::nullopt;
+ static TuyaBLEResponseParsedPacket fromData(const Buffer& data) {
+  if(data.size() < 1) return TuyaBLEResponseParsedPacket();
 
   TuyaBLEResponseParsedPacket parsedPacket;
 
@@ -67,17 +67,16 @@ void TuyaBLEDevice::clearExpectedResponse() {
 
 void TuyaBLEDevice::onNotify(NimBLERemoteCharacteristic* characteristic, uint8_t* data, size_t length, bool isNotify) {
   auto packet = TuyaBLEResponseParsedPacket::fromData(Buffer(data, length));
-  if(!packet) return;
-  if(packet->packetNumber != _expectedResponsePacketNumber) return;
+  if(packet.packetNumber != _expectedResponsePacketNumber) return;
 
   //Serial.printf("Received packet %ld\n", packet->packetNumber);
 		
-	if(packet->packetNumber == 0) {
+	if(packet.packetNumber == 0) {
 		_receivedData = Buffer();
-		_expectedResponseDataLength = packet->messageLength;
+		_expectedResponseDataLength = packet.messageLength;
 	}
 
-  _receivedData.append(packet->data);
+  _receivedData.append(packet.data);
   if(_receivedData.size() < _expectedResponseDataLength) {
     _expectedResponsePacketNumber += 1;
   } else if(_receivedData.size() == _expectedResponseDataLength) {

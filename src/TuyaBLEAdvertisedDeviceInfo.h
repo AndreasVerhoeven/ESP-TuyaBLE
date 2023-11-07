@@ -3,7 +3,6 @@
 
 #include <Arduino.h>
 #include <NimBLEDevice.h>
-#include <optional>
 
 class TuyaBLEDevice;
 
@@ -12,6 +11,7 @@ class TuyaBLEAdvertisedDeviceInfo {
     friend class TuyaBLEDevice;
 
 protected:
+    bool _isValid = true;
     NimBLEAddress _address;
     bool _isBound = false;
     uint8_t _protocolVersion = 3;
@@ -19,13 +19,17 @@ protected:
     uint16_t _communicationCapacity = 0;
     String _uuid;
 
-    TuyaBLEAdvertisedDeviceInfo() {}
+    TuyaBLEAdvertisedDeviceInfo() : _isValid(false) {}
     TuyaBLEAdvertisedDeviceInfo(const NimBLEAddress& address, bool isBound, uint8_t protocolVersion, uint8_t encryptionMethod, uint16_t communicationCapacity, const String& uuid) :
     _address(address), _isBound(isBound), _protocolVersion(protocolVersion), _encryptionMethod(encryptionMethod), _communicationCapacity(communicationCapacity), _uuid(uuid) {}
 
 public:
     /// returns the tuya device info for an advertised device, if it is a tuya ble device. std::nullopt otherwise.
-    static std::optional<TuyaBLEAdvertisedDeviceInfo> fromBLEAdvertisedDevice(NimBLEAdvertisedDevice bleAdvertisedDevice);
+    TuyaBLEAdvertisedDeviceInfo fromBLEAdvertisedDevice(NimBLEAdvertisedDevice bleAdvertisedDevice);
+
+    static const TuyaBLEAdvertisedDeviceInfo invalid;
+
+    bool isValid() const { return _isValid; }
 
     const NimBLEAddress& address() const { return _address; }
     bool isBound() const { return _isBound; }
