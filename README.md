@@ -30,19 +30,19 @@ When Tuya devices are registered in one of their apps, they get a `deviceId`, `l
 
 ### Scanning
 
-You can discover existing by Tuya BLE devices by actively scanning for BLE advertisements. Use `TuyaBLEAdvertisedDeviceInfo::fromBLEAdvertisedDevice()` to check if a `NimBLEAdvertisedDevice` is a Tuya device and what its `uuid` is: this function will return null if the device is not a Tuya device and a `TuyaBLEAdvertisedDeviceInfo` class if it is.
+You can discover existing Tuya BLE devices by actively scanning for BLE advertisements. Use `TuyaBLEAdvertisedDeviceInfo::fromBLEAdvertisedDevice()` to check if a `NimBLEAdvertisedDevice` is a Tuya device and what its `uuid` is: this function will return an invalid info object if the device is not a Tuya device and a valid `TuyaBLEAdvertisedDeviceInfo` class if it is.
 
 
 Example of scanning devices:
-```
+```c++
 NimBLEScan *pBLEScan;
 std::shared_ptr<TuyaBLEDevice> _tuyaBleDevice;
 class MyAdvertisedDeviceCallbacks : public NimBLEScanCallbacks {
     void onResult(NimBLEAdvertisedDevice *advertisedDevice) {
       auto info = TuyaBLEAdvertisedDeviceInfo::fromBLEAdvertisedDevice(*advertisedDevice);
-      if(info) {
+      if(info.isValid()) {
         Serial.println(advertisedDevice->getAddress().toString().c_str());
-        Serial.println(info->uuid());
+        Serial.println(info.uuid());
 
         _tuyaBleDevice = std::make_shared<TuyaBLEDevice>(info, credentials);
         // you cannot connect here, because you are still scanning:
@@ -77,7 +77,7 @@ Sending datapoints is done using the `sendDataPoints()` method, this method take
 ## Example
 
 This example connects to a simple tuya BLE smart lock
-```
+```c++
 #include <Arduino.h>
 #include <NimBLEDevice.h>
 #include "TuyaBLEDevice.h"
