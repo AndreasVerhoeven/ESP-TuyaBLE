@@ -124,7 +124,7 @@ public:
     // connect / disconnect
     virtual bool connect();
     virtual bool disconnect();
-    bool isConnected() const { _client != nullptr && _client->isConnected(); };
+    bool isConnected() const { return _client != nullptr && _client->isConnected(); };
     bool isReady() const { return _isReady; }
 
     // checking received dps
