@@ -183,8 +183,6 @@ public:
     void enableDebugLog();
     void enableDebugLog(std::function<void(TuyaBLEDevice*, const String&)> callback);
     void disableDebugLog();
-
-    void sendUnlock();
 };
 
 #endif//TUYA_DEVICE_123

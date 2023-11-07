@@ -307,32 +307,6 @@ void TuyaBLEDevice::sendDataPoint(const TuyaDataPoint& dp, std::function<void(Tu
   sendDataPoints(std::vector<TuyaDataPoint>{dp}, callback);
 }
 
-#define TUYA_REGULAR_LOCK
-void TuyaBLEDevice::sendUnlock() {
-  #ifdef TUYA_REGULAR_LOCK
-  Buffer data;
-  data.append(0x06); // dp id
-  data.append(static_cast<uint8_t>(TuyaDataPointType::raw)); // type
-  data.append(2); // length
-  data.append(0); // unlock
-  data.append(1); // member id
-
-  #else
-  Buffer data;
-  data.append(0x47);
-  data.append(static_cast<uint8_t>(TuyaDataPointType::raw)); // type
-  data.append(19); // length
-  data.appendBigEndian(uint16_t(0xFFFF)); // central id
-  data.appendBigEndian(uint16_t(1)); // peripheral id
-  data.append(String("16183634")); // central random number
-  data.append(0); // lock = 0, unlock = 1
-  data.appendBigEndian(uint32_t(0x653c0c53)); // timestamp
-  data.appendBigEndian(uint16_t(1)); // member id
-  #endif
-
-  sendMessage(TuyaBLEFunctionCode::senderDps, data, 0, true);
-}
-
 void TuyaBLEDevice::sendPairingRequest() {
   Buffer data;
   data.append(uuid());
