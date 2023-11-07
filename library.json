@@ -20,7 +20,7 @@
     "license": "MIT",
     "homepage": "https://github.com/AndreasVerhoeven/ESP-TuyaBLE",
     "dependencies": {
-        "obsttube/CryptoAES_CBC": "~1.0.0"
+        "obsttube/CryptoAES_CBC": "~1.0.0",
         "h2zero/NimBLE-Arduino": "^1.4.0"
     },
     "frameworks": "*",
