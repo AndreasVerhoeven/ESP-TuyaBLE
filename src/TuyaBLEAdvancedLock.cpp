@@ -13,7 +13,7 @@ void TuyaBLEAdvancedLock::setFromTuyaDP71Base64EncodedValue(const String& base64
         size_t offset = 0;
         peripheralId = data.readBigEndianUint16(offset);
         centralId = data.readBigEndianUint16(offset);
-        centralRandomNumber = String(data.data() + 4, 12);
+        centralRandomNumber = String(data.data() + 4, 8);
     }
 }
 
