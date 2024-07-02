@@ -43,3 +43,7 @@ void setup() {
   // and connect once everything is set up
   lock->connect();
 }
+
+void loop() {
+  // Nothing to do here
+}
